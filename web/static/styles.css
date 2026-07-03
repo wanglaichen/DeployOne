@@ -652,7 +652,14 @@ body.modal-open {
   height: 44px;
   border-radius: 12px;
   background: #ecfdf5;
+  color: #047857;
   font-size: 22px;
+}
+
+.modal-upload-icon svg {
+  width: 26px;
+  height: 26px;
+  display: block;
 }
 
 .modal-upload-percent {

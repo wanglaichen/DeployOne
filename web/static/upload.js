@@ -120,8 +120,8 @@
     uploadingState.classList.remove("hidden");
     uploadNameEl.textContent = file.name;
     uploadSizeEl.textContent = formatBytes(file.size);
-    uploadIconEl.textContent = categoryIcon();
-    dropzoneIconEl.textContent = categoryIcon();
+    uploadIconEl.innerHTML = categoryIcon();
+    dropzoneIconEl.innerHTML = categoryIcon();
     modalClose.disabled = true;
     cancelButton.disabled = false;
   }
@@ -317,5 +317,5 @@
     }
   });
 
-  dropzoneIconEl.textContent = categoryIcon();
+  dropzoneIconEl.innerHTML = categoryIcon();
 })();
