@@ -31,31 +31,31 @@ type TabView struct {
 	Key    string
 	Label  string
 	Desc   string
-	Icon   string
+	Icon   template.HTML
 	Count  int
 	Active bool
 }
 
 type IndexData struct {
-	Items         []APKView
-	PublicURL     string
-	MaxUploadMB   int64
-	Error         string
-	Success       string
-	ActiveTab     string
-	Tabs          []TabView
-	PageTitle     string
-	HeroEyebrow   string
-	HeroTitle     string
-	HeroAccent    string
-	PageDesc      string
-	UploadTitle   string
-	FileLabel     string
-	ListTitle     string
-	EmptyText     string
-	SubmitText    string
-	Accept        string
-	ShowQR        bool
+	Items       []APKView
+	PublicURL   string
+	MaxUploadMB int64
+	Error       string
+	Success     string
+	ActiveTab   string
+	Tabs        []TabView
+	PageTitle   string
+	HeroEyebrow string
+	HeroTitle   string
+	HeroAccent  string
+	PageDesc    string
+	UploadTitle string
+	FileLabel   string
+	ListTitle   string
+	EmptyText   string
+	SubmitText  string
+	Accept      string
+	ShowQR      bool
 }
 
 type DetailData struct {
@@ -129,9 +129,9 @@ func (s *Server) index(w http.ResponseWriter, r *http.Request) {
 		Success:     r.URL.Query().Get("success"),
 		ActiveTab:   activeTab,
 		Tabs: []TabView{
-			{Key: model.CategoryAndroid, Label: "安卓包", Desc: "APK 安装包", Icon: "🤖", Count: counts[model.CategoryAndroid], Active: activeTab == model.CategoryAndroid},
-			{Key: model.CategoryIOS, Label: "苹果包", Desc: "IPA 测试包", Icon: "🍎", Count: counts[model.CategoryIOS], Active: activeTab == model.CategoryIOS},
-			{Key: model.CategoryFile, Label: "普通文件", Desc: "任意格式分享", Icon: "📁", Count: counts[model.CategoryFile], Active: activeTab == model.CategoryFile},
+			{Key: model.CategoryAndroid, Label: "安卓包", Desc: "APK 安装包", Icon: iconAndroidSVG, Count: counts[model.CategoryAndroid], Active: activeTab == model.CategoryAndroid},
+			{Key: model.CategoryIOS, Label: "苹果包", Desc: "IPA 测试包", Icon: iconAppleSVG, Count: counts[model.CategoryIOS], Active: activeTab == model.CategoryIOS},
+			{Key: model.CategoryFile, Label: "普通文件", Desc: "任意格式分享", Icon: iconFolderSVG, Count: counts[model.CategoryFile], Active: activeTab == model.CategoryFile},
 		},
 		PageTitle:   meta.PageTitle,
 		HeroEyebrow: meta.HeroEyebrow,
