@@ -1,0 +1,8 @@
+{
+  "host": "0.0.0.0",
+  "port": 8080,
+  "public_base_url": "http://localhost:8080",
+  "upload_dir": "data/uploads",
+  "data_file": "data/apks.json",
+  "max_upload_mb": 2048
+}

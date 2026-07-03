@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{.Item.AppName}} - {{.PageTitle}}</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="page">
+    <section class="hero detail-hero">
+      <div class="hero-head">
+        <div class="hero-copy">
+          <p class="eyebrow">File Detail</p>
+          <h1>{{.Item.AppName}}</h1>
+          <p class="muted hero-desc">{{.PageDesc}}</p>
+        </div>
+        <div class="server-card">
+          <span>服务器地址</span>
+          <strong>{{.PublicURL}}</strong>
+        </div>
+      </div>
+
+      <nav class="tab-bar tab-bar-single hero-tabs" aria-label="文件分类">
+        <a class="tab-item is-active" href="{{.BackURL}}">
+          <span class="tab-icon" aria-hidden="true">↩</span>
+          <span class="tab-copy">
+            <strong class="tab-label">{{.Item.CategoryText}}</strong>
+            <small class="tab-desc">返回列表</small>
+          </span>
+          <span class="tab-count">Back</span>
+        </a>
+      </nav>
+    </section>
+
+    <section class="panel detail-panel">
+      <div class="detail-main">
+        <a class="back-link" href="{{.BackURL}}">返回列表</a>
+        <h2>文件信息</h2>
+        <dl class="detail-list">
+          <dt>类型</dt>
+          <dd>{{.Item.CategoryText}}</dd>
+          <dt>名称</dt>
+          <dd>{{.Item.AppName}}</dd>
+          {{if .Item.Version}}
+          <dt>版本号</dt>
+          <dd>{{.Item.Version}}</dd>
+          {{end}}
+          <dt>文件名</dt>
+          <dd>{{.Item.FileName}}</dd>
+          <dt>大小</dt>
+          <dd>{{.Item.SizeText}}</dd>
+          <dt>上传时间</dt>
+          <dd>{{.Item.UploadedAt}}</dd>
+        </dl>
+
+        <h2>下载地址</h2>
+        <div class="link-row detail-link-row">
+          <input readonly value="{{.Item.DownloadURL}}">
+          <a class="button secondary" href="{{.Item.DownloadURL}}">{{.DownloadLabel}}</a>
+        </div>
+        <p class="muted address-note">二维码内容使用配置文件里的服务器地址拼接当前文件下载路径。</p>
+      </div>
+
+      <aside class="detail-qr">
+        <img src="{{.Item.LargeQRURL}}" alt="{{.Item.AppName}} 大二维码">
+        <strong>{{.QRLabel}}</strong>
+        <span class="muted">{{.Item.DownloadURL}}</span>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>

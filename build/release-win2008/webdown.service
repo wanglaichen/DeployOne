@@ -1,0 +1,16 @@
+[Unit]
+Description=WebDown APK Management Service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/webdown
+ExecStart=/opt/webdown/webdown -config /opt/webdown/config/config.json
+Restart=always
+RestartSec=5
+StandardOutput=append:/var/log/webdown/webdown.log
+StandardError=append:/var/log/webdown/webdown.log
+
+[Install]
+WantedBy=multi-user.target
