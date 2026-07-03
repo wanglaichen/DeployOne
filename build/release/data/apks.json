@@ -1,0 +1,35 @@
+[
+  {
+    "id": "107b431a7b2bc2c4",
+    "category": "",
+    "app_name": "1",
+    "version": "",
+    "description": "",
+    "file_name": "1.apk",
+    "stored_name": "107b431a7b2bc2c4.apk",
+    "size": 109825829,
+    "uploaded_at": "2026-07-03T02:50:23.6385147+08:00"
+  },
+  {
+    "id": "d5e87cefa263b438",
+    "category": "",
+    "app_name": "GameBase-release",
+    "version": "",
+    "description": "",
+    "file_name": "GameBase-release.apk",
+    "stored_name": "d5e87cefa263b438.apk",
+    "size": 109875394,
+    "uploaded_at": "2026-07-03T02:50:30.3166581+08:00"
+  },
+  {
+    "id": "ee098f624413425d",
+    "category": "file",
+    "app_name": "clean_windows_update",
+    "version": "",
+    "description": "",
+    "file_name": "clean_windows_update.bat",
+    "stored_name": "ee098f624413425d.bat",
+    "size": 808,
+    "uploaded_at": "2026-07-04T02:19:32.8903154+08:00"
+  }
+]
