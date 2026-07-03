@@ -2,7 +2,8 @@ data/
 !build/release-win2008/data/
 !build/release-win2008/data/apks.json
 build/release-win2008/data/uploads/
+build/release/data/uploads/
 build/dist/
-build/release/
 *.exe
 !build/release-win2008/webdown.exe
+!build/release/webdown.exe
