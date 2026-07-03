@@ -100,6 +100,13 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("/upload", s.upload)
 	mux.HandleFunc("/download/", s.download)
 	mux.HandleFunc("/qr/", s.qr)
+
+	mux.HandleFunc("/api/health", s.apiHealth)
+	mux.HandleFunc("/api/stats", s.apiStats)
+	mux.HandleFunc("/api/list", s.apiList)
+	mux.HandleFunc("/api/info/", s.apiInfo)
+	mux.HandleFunc("/api/check/", s.apiCheck)
+
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(filepath.Join("web", "static")))))
 	return mux
 }
