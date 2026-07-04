@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -25,6 +26,7 @@ type Server struct {
 	cfg       config.Config
 	store     *store.Store
 	templates *template.Template
+	sessions  *sessionStore
 }
 
 type TabView struct {
@@ -72,6 +74,7 @@ type DetailData struct {
 type APKView struct {
 	model.APK
 	SizeText     string
+	ExtText      string
 	UploadedAt   string
 	DownloadURL  string
 	QRURL        string
@@ -85,12 +88,18 @@ func New(cfg config.Config, st *store.Store) (*Server, error) {
 		return nil, fmt.Errorf("create upload dir: %w", err)
 	}
 
+	if removed, err := st.PruneMissing(cfg.UploadDir); err != nil {
+		return nil, fmt.Errorf("sync file list: %w", err)
+	} else if removed > 0 {
+		log.Printf("startup sync: removed %d missing file record(s)", removed)
+	}
+
 	tpl, err := template.New("").ParseGlob(filepath.Join("web", "templates", "*.html"))
 	if err != nil {
 		return nil, fmt.Errorf("parse templates: %w", err)
 	}
 
-	return &Server{cfg: cfg, store: st, templates: tpl}, nil
+	return &Server{cfg: cfg, store: st, templates: tpl, sessions: newSessionStore()}, nil
 }
 
 func (s *Server) Handler() http.Handler {
@@ -106,6 +115,13 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("/api/list", s.apiList)
 	mux.HandleFunc("/api/info/", s.apiInfo)
 	mux.HandleFunc("/api/check/", s.apiCheck)
+	mux.HandleFunc("/api/sync", s.apiSync)
+
+	mux.HandleFunc("/admin/login", s.adminLogin)
+	mux.HandleFunc("/admin/logout", s.adminLogout)
+	mux.HandleFunc("/admin/delete", s.adminDelete)
+	mux.HandleFunc("/admin/delete-all", s.adminDeleteAll)
+	mux.HandleFunc("/admin", s.adminIndex)
 
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(filepath.Join("web", "static")))))
 	return mux
@@ -119,6 +135,21 @@ func (s *Server) index(w http.ResponseWriter, r *http.Request) {
 
 	activeTab := normalizeCategory(r.URL.Query().Get("tab"))
 	meta := getCategoryMeta(activeTab)
+
+	success := r.URL.Query().Get("success")
+	if r.URL.Query().Get("sync") == "1" {
+		removed, err := s.syncMissingFiles()
+		if err != nil {
+			http.Redirect(w, r, "/?tab="+activeTab+"&error="+url.QueryEscape("刷新失败"), http.StatusSeeOther)
+			return
+		}
+		if removed > 0 {
+			success = fmt.Sprintf("列表已刷新，移除了 %d 个失效记录", removed)
+		} else {
+			success = "列表已刷新"
+		}
+	}
+
 	counts := s.store.CountByCategory()
 
 	data := IndexData{
@@ -126,7 +157,7 @@ func (s *Server) index(w http.ResponseWriter, r *http.Request) {
 		PublicURL:   s.publicBaseURL(r),
 		MaxUploadMB: s.cfg.MaxUploadMB,
 		Error:       r.URL.Query().Get("error"),
-		Success:     r.URL.Query().Get("success"),
+		Success:     success,
 		ActiveTab:   activeTab,
 		Tabs: []TabView{
 			{Key: model.CategoryAndroid, Label: "安卓包", Desc: "APK 安装包", Icon: iconAndroidSVG, Count: counts[model.CategoryAndroid], Active: activeTab == model.CategoryAndroid},
@@ -314,6 +345,7 @@ func (s *Server) view(r *http.Request, item model.APK) APKView {
 	return APKView{
 		APK:          item,
 		SizeText:     formatBytes(item.Size),
+		ExtText:      strings.ToLower(filepath.Ext(item.FileName)),
 		UploadedAt:   item.UploadedAt.Format("2006-01-02 15:04:05"),
 		DownloadURL:  s.downloadURL(r, item.ID),
 		QRURL:        "/qr/" + item.ID + ".png?size=320",

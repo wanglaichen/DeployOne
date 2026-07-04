@@ -13,6 +13,8 @@ type Config struct {
 	UploadDir     string `json:"upload_dir"`
 	DataFile      string `json:"data_file"`
 	MaxUploadMB   int64  `json:"max_upload_mb"`
+	AdminUser     string `json:"admin_user"`
+	AdminPassword string `json:"admin_password"`
 }
 
 func Load(path string) (Config, error) {
@@ -23,6 +25,8 @@ func Load(path string) (Config, error) {
 		UploadDir:     "data/uploads",
 		DataFile:      "data/apks.json",
 		MaxUploadMB:   2048,
+		AdminUser:     "admin",
+		AdminPassword: "admin",
 	}
 
 	content, err := os.ReadFile(path)
@@ -32,6 +36,9 @@ func Load(path string) (Config, error) {
 	if err := json.Unmarshal(content, &cfg); err != nil {
 		return cfg, fmt.Errorf("parse config %q: %w", path, err)
 	}
+
+	applyAdminEnv(&cfg)
+
 	if cfg.Port <= 0 || cfg.Port > 65535 {
 		return cfg, fmt.Errorf("invalid port: %d", cfg.Port)
 	}
@@ -44,7 +51,28 @@ func Load(path string) (Config, error) {
 	if cfg.DataFile == "" {
 		return cfg, fmt.Errorf("data_file is required")
 	}
+	if cfg.AdminUser == "" {
+		return cfg, fmt.Errorf("admin_user is required")
+	}
+	if cfg.AdminPassword == "" {
+		return cfg, fmt.Errorf("admin_password is required")
+	}
 	return cfg, nil
+}
+
+func applyAdminEnv(cfg *Config) {
+	if value := os.Getenv("WEBDOWN_ADMIN_USER"); value != "" {
+		cfg.AdminUser = value
+	}
+	if value := os.Getenv("WEBDOWN_ADMIN_PASSWORD"); value != "" {
+		cfg.AdminPassword = value
+	}
+	if cfg.AdminUser == "" {
+		cfg.AdminUser = "admin"
+	}
+	if cfg.AdminPassword == "" {
+		cfg.AdminPassword = "admin"
+	}
 }
 
 func (c Config) Addr() string {

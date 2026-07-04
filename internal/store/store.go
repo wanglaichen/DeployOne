@@ -89,6 +89,66 @@ func (s *Store) Add(apk model.APK) error {
 	return s.saveLocked()
 }
 
+func (s *Store) Delete(id string) (model.APK, bool, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	for i, item := range s.items {
+		if item.ID != id {
+			continue
+		}
+		removed := item
+		s.items = append(s.items[:i], s.items[i+1:]...)
+		return removed, true, s.saveLocked()
+	}
+	return model.APK{}, false, nil
+}
+
+func (s *Store) DeleteByCategory(category string) ([]model.APK, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	removed := make([]model.APK, 0)
+	kept := make([]model.APK, 0, len(s.items))
+	for _, item := range s.items {
+		if category == "" || item.ResolvedCategory() == category {
+			removed = append(removed, item)
+			continue
+		}
+		kept = append(kept, item)
+	}
+	if len(removed) == 0 {
+		return nil, nil
+	}
+	s.items = kept
+	return removed, s.saveLocked()
+}
+
+func (s *Store) PruneMissing(uploadDir string) (int, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	kept := make([]model.APK, 0, len(s.items))
+	removed := 0
+	for _, item := range s.items {
+		filePath := filepath.Join(uploadDir, item.StoredName)
+		_, err := os.Stat(filePath)
+		if err == nil {
+			kept = append(kept, item)
+			continue
+		}
+		if !errors.Is(err, os.ErrNotExist) {
+			return removed, fmt.Errorf("check file %q: %w", filePath, err)
+		}
+		removed++
+	}
+	if removed == 0 {
+		return 0, nil
+	}
+	s.items = kept
+	return removed, s.saveLocked()
+}
+
 func (s *Store) load() error {
 	content, err := os.ReadFile(s.filePath)
 	if errors.Is(err, os.ErrNotExist) {

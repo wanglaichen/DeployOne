@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
+  <a class="admin-entry-link" href="/admin/login">管理登录</a>
   <main class="page">
     <section class="hero">
       <div class="hero-head">
@@ -58,7 +59,10 @@
     <section class="panel">
       <div class="section-title">
         <h2>{{.ListTitle}}</h2>
-        <span>{{len .Items}} 个文件</span>
+        <div class="list-toolbar">
+          <span>{{len .Items}} 个文件</span>
+          <a class="button secondary" href="/?tab={{.ActiveTab}}&sync=1">刷新列表</a>
+        </div>
       </div>
 
       {{if .Items}}
@@ -133,7 +137,7 @@
 
             <label id="modal-dropzone" class="modal-dropzone" for="upload-file">
               <input id="upload-file" class="modal-file-input" type="file" name="file" accept="{{.Accept}}">
-              <span class="modal-dropzone-icon" id="modal-dropzone-icon" aria-hidden="true">📦</span>
+              <span class="modal-dropzone-icon" id="modal-dropzone-icon" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path fill="currentColor" d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg></span>
               <strong id="modal-dropzone-title">拖拽文件到此处，或点击选择</strong>
               <span class="modal-dropzone-hint" id="modal-dropzone-hint">支持 {{.FileLabel}}，最大 {{.MaxUploadMB}} MB</span>
             </label>
@@ -143,7 +147,7 @@
             <div class="modal-upload-card">
               <div class="modal-upload-top">
                 <div class="modal-upload-file">
-                  <span class="modal-upload-icon" id="modal-upload-icon" aria-hidden="true">📦</span>
+                  <span class="modal-upload-icon" id="modal-upload-icon" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path fill="currentColor" d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg></span>
                   <div>
                     <strong id="modal-upload-name">filename.apk</strong>
                     <span class="muted" id="modal-upload-size">0 MB</span>

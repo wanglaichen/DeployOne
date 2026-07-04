@@ -102,11 +102,18 @@ body {
   height: 48px;
   border-radius: 14px;
   background: rgba(148, 163, 184, 0.1);
+  color: var(--text);
   font-size: 22px;
   line-height: 1;
-  opacity: 0.82;
+  opacity: 0.92;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
   transition: opacity .2s, transform .2s, box-shadow .2s;
+}
+
+.tab-icon svg {
+  width: 28px;
+  height: 28px;
+  display: block;
 }
 
 .tab-copy {
@@ -429,6 +436,14 @@ h2 {
 .upload-panel-btn,
 .empty-upload-btn {
   flex-shrink: 0;
+  min-height: 56px;
+  padding: 0 28px;
+  font-size: 17px;
+}
+
+.upload-panel-btn {
+  min-width: 168px;
+  box-shadow: 0 14px 32px var(--accent-glow);
 }
 
 .empty-upload-btn {
@@ -578,11 +593,18 @@ body.modal-open {
 .modal-dropzone-icon {
   display: grid;
   place-items: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   background: #eff6ff;
+  color: #0f172a;
   font-size: 28px;
+}
+
+.modal-dropzone-icon svg {
+  width: 22px;
+  height: 22px;
+  display: block;
 }
 
 .modal-dropzone strong {
@@ -634,11 +656,18 @@ body.modal-open {
   display: grid;
   flex-shrink: 0;
   place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
   background: #ecfdf5;
+  color: #047857;
   font-size: 22px;
+}
+
+.modal-upload-icon svg {
+  width: 20px;
+  height: 20px;
+  display: block;
 }
 
 .modal-upload-percent {
@@ -1016,13 +1045,70 @@ button.is-loading::before {
 }
 
 .detail-panel {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 420px;
-  gap: 32px;
+  display: block;
+  padding: 0;
 }
 
 .detail-hero {
   margin-bottom: 0;
+}
+
+.qr-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 12px 0 8px;
+}
+
+.qr-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: rgba(15, 23, 42, 0.72);
+  text-align: center;
+}
+
+.qr-box img {
+  width: min(100%, 420px);
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: #fff;
+}
+
+.qr-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.qr-link-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: min(100%, 640px);
+}
+
+.detail-link-row {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.detail-info {
+  width: min(100%, 720px);
+  margin: 0 auto;
+}
+
+.detail-info h2 {
+  margin: 0 0 16px;
+  font-size: 20px;
+  text-align: center;
 }
 
 .back-link {
@@ -1093,6 +1179,190 @@ button.is-loading::before {
   background: rgba(15, 23, 42, 0.45);
 }
 
+.admin-entry-link {
+  position: fixed;
+  top: 18px;
+  right: 20px;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.82);
+  color: var(--text-soft);
+  font-weight: 700;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+}
+
+.admin-entry-link:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.page-narrow {
+  max-width: 520px;
+}
+
+.admin-login-panel {
+  margin-top: 80px;
+}
+
+.admin-login-header h1 {
+  margin-bottom: 10px;
+}
+
+.admin-login-form {
+  display: grid;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.admin-login-form label {
+  display: grid;
+  gap: 8px;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+.admin-hero .admin-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 140px;
+}
+
+.admin-toolbar,
+.list-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.button.danger {
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+}
+
+.button.danger:hover:not(:disabled) {
+  box-shadow: 0 10px 24px rgba(239, 68, 68, 0.28);
+}
+
+.admin-list {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-table {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.admin-table-head,
+.admin-table-row {
+  display: grid;
+  grid-template-columns: 96px minmax(120px, 1.6fr) 88px 108px 168px 88px;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.admin-table-head {
+  border-bottom: 1px solid var(--border);
+  background: rgba(30, 41, 59, 0.72);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.admin-table-row {
+  border-bottom: 1px solid rgba(42, 53, 72, 0.72);
+  transition: background .15s;
+}
+
+.admin-table-row:last-child {
+  border-bottom: 0;
+}
+
+.admin-table-row:hover {
+  background: rgba(30, 41, 59, 0.55);
+}
+
+.admin-cell {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-soft);
+}
+
+.admin-cell-type {
+  overflow: visible;
+}
+
+.admin-cell-type .card-badge {
+  display: inline-flex;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 0;
+}
+
+.admin-cell-name {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.admin-cell-ext {
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.admin-cell-time {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.admin-cell-action {
+  overflow: visible;
+  text-align: right;
+}
+
+.admin-cell-action form {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.button-compact {
+  min-height: 36px;
+  padding: 0 14px;
+  font-size: 13px;
+}
+
+.admin-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.admin-row h3 {
+  margin-bottom: 6px;
+}
+
+.admin-row-actions {
+  flex-shrink: 0;
+}
+
 @media (max-width: 760px) {
   .tab-bar {
     grid-template-columns: 1fr;
@@ -1101,9 +1371,28 @@ button.is-loading::before {
   .hero-head,
   .form-footer,
   .link-row,
-  .upload-panel-inner {
+  .upload-panel-inner,
+  .admin-row,
+  .admin-toolbar,
+  .list-toolbar {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .admin-table {
+    overflow-x: auto;
+  }
+
+  .admin-table-head,
+  .admin-table-row {
+    min-width: 760px;
+  }
+
+  .admin-entry-link {
+    position: static;
+    display: flex;
+    justify-content: center;
+    margin: 0 20px 12px;
   }
 
   .hero-tabs {

@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
+  <a class="admin-entry-link" href="/admin/login">管理登录</a>
   <main class="page">
     <section class="hero">
       <div class="hero-head">
@@ -58,7 +59,10 @@
     <section class="panel">
       <div class="section-title">
         <h2>{{.ListTitle}}</h2>
-        <span>{{len .Items}} 个文件</span>
+        <div class="list-toolbar">
+          <span>{{len .Items}} 个文件</span>
+          <a class="button secondary" href="/?tab={{.ActiveTab}}&sync=1">刷新列表</a>
+        </div>
       </div>
 
       {{if .Items}}

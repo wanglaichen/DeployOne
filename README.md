@@ -35,6 +35,28 @@
 - `upload_dir`：APK 文件保存目录。
 - `data_file`：APK 信息保存文件。
 - `max_upload_mb`：单个 APK 最大上传大小。
+- `admin_user` / `admin_password`：管理后台账号，也可用环境变量 `WEBDOWN_ADMIN_USER`、`WEBDOWN_ADMIN_PASSWORD` 覆盖，默认均为 `admin`。
+
+## 管理后台
+
+首页右上角点击 **管理登录**，默认账号 `admin` / `admin`。
+
+登录后可：
+
+- 删除指定文件
+- 清空当前分类下的全部文件
+- 清空全部文件
+- 刷新列表，自动移除磁盘上已被人工删除的失效记录
+
+服务**每次启动**时也会自动检查并清理失效记录。各分类列表旁的 **刷新列表** 按钮可手动同步。
+
+生产环境请修改管理员密码，例如：
+
+```powershell
+$env:WEBDOWN_ADMIN_USER = "admin"
+$env:WEBDOWN_ADMIN_PASSWORD = "your-strong-password"
+.\build\release-win2008\webdown.exe -config .\config\config.json
+```
 
 ## 本地运行
 

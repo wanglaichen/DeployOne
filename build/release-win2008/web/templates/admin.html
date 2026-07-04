@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>文件管理 - WebDown</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="page">
+    <section class="hero admin-hero">
+      <div class="hero-head">
+        <div class="hero-copy">
+          <p class="eyebrow">Admin Panel</p>
+          <h1 class="hero-title">
+            <span class="hero-title-main">文件</span>
+            <span class="hero-title-accent">管理中心</span>
+          </h1>
+          <p class="muted hero-desc">可删除指定文件，或清空当前分类 / 全部文件。删除后会同时移除磁盘上的实际文件。</p>
+        </div>
+        <div class="admin-actions">
+          <form action="/admin/logout" method="post">
+            <button type="submit" class="button secondary">退出登录</button>
+          </form>
+          <a class="button" href="/">返回首页</a>
+        </div>
+      </div>
+
+      <nav class="tab-bar hero-tabs" aria-label="管理分类">
+        {{range .Tabs}}
+        <a class="tab-item tab-{{.Key}} {{if .Active}}is-active{{end}}" href="/admin?tab={{.Key}}">
+          <span class="tab-icon" aria-hidden="true">{{.Icon}}</span>
+          <span class="tab-copy">
+            <strong class="tab-label">{{.Label}}</strong>
+            <small class="tab-desc">{{.Desc}}</small>
+            <span class="tab-file-count"><strong>{{.Count}}</strong> 个文件</span>
+          </span>
+        </a>
+        {{end}}
+      </nav>
+    </section>
+
+    {{if .Error}}
+    <div class="alert alert-error">{{.Error}}</div>
+    {{end}}
+    {{if .Success}}
+    <div class="alert alert-success">{{.Success}}</div>
+    {{end}}
+
+    <section class="panel">
+      <div class="section-title">
+        <h2>管理列表</h2>
+        <div class="admin-toolbar">
+          <span class="muted">{{len .Items}} 个文件 / 共 {{.TotalCount}} 个</span>
+          <a class="button secondary" href="/admin?tab={{.ActiveTab}}&sync=1">刷新列表</a>
+          <form action="/admin/delete-all" method="post" onsubmit="return confirm('确定清空当前分类下的全部文件吗？');">
+            <input type="hidden" name="tab" value="{{.ActiveTab}}">
+            <input type="hidden" name="scope" value="category">
+            <button type="submit" class="button danger">清空当前分类</button>
+          </form>
+          <form action="/admin/delete-all" method="post" onsubmit="return confirm('确定清空全部文件吗？此操作不可恢复。');">
+            <input type="hidden" name="tab" value="{{.ActiveTab}}">
+            <input type="hidden" name="scope" value="all">
+            <button type="submit" class="button danger">清空全部</button>
+          </form>
+        </div>
+      </div>
+
+      {{if .Items}}
+      <div class="admin-table">
+        <div class="admin-table-head">
+          <span>类型</span>
+          <span>名称</span>
+          <span>后缀名</span>
+          <span>大小</span>
+          <span>上传时间</span>
+          <span>操作</span>
+        </div>
+        {{range .Items}}
+        <div class="admin-table-row">
+          <span class="admin-cell admin-cell-type" title="{{.CategoryText}}">
+            <em class="card-badge">{{.CategoryText}}</em>
+          </span>
+          <span class="admin-cell admin-cell-name" title="{{.AppName}}">{{.AppName}}</span>
+          <span class="admin-cell admin-cell-ext" title="{{.ExtText}}">{{if .ExtText}}{{.ExtText}}{{else}}-{{end}}</span>
+          <span class="admin-cell admin-cell-size" title="{{.SizeText}}">{{.SizeText}}</span>
+          <span class="admin-cell admin-cell-time" title="{{.UploadedAt}}">{{.UploadedAt}}</span>
+          <span class="admin-cell admin-cell-action">
+            <form action="/admin/delete" method="post" onsubmit="return confirm('确定删除 {{.AppName}} 吗？');">
+              <input type="hidden" name="id" value="{{.ID}}">
+              <input type="hidden" name="tab" value="{{$.ActiveTab}}">
+              <button type="submit" class="button danger button-compact">删除</button>
+            </form>
+          </span>
+        </div>
+        {{end}}
+      </div>
+      {{else}}
+      <div class="empty">当前分类下没有文件。</div>
+      {{end}}
+    </section>
+  </main>
+</body>
+</html>
