@@ -2,6 +2,7 @@ data/uploads/
 build/release-win2008/data/uploads/
 build/release/data/uploads/
 build/dist/
+*.exe~
 *.exe
 !build/release-win2008/webdown.exe
 !build/release/webdown.exe
